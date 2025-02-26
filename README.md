@@ -8,4 +8,5 @@
 - piHole
 - Vaultwarden
 - Wordpress
+- Syncthing
 
