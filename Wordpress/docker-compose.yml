@@ -1,0 +1,29 @@
+services:
+  wordpress:
+    image: wordpress
+    restart: unless-stopped
+    ports:
+      - 8180:80 # Change the host port as needed.
+    environment:
+    # Change the below to what is best for you, Information needs to match the DB info.
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: db_username
+      WORDPRESS_DB_PASSWORD: db_password
+      WORDPRESS_DB_NAME: db_name
+    volumes:
+      - wordpress:/var/www/html
+
+  db:
+    image: mysql:5.7
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: db_name
+      MYSQL_USER: db_username
+      MYSQL_PASSWORD: db_password
+      MYSQL_RANDOM_ROOT_PASSWORD: '1' # This will generate a randome root password.
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  wordpress:
+  db:

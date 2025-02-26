@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
+    ports:
+      - "192.168.x.x:53/tcp" # IP address to be changed to you host IP
+      - "192.168.x.x:53/udp" # IP address to be changed to you host IP
+      # - "6667:67/udp" # Only required if you are using Pi-hole as your DHCP server
+      - "8880:80/tcp"
+    environment:
+      TZ: 'Europe/London'
+      WEBPASSWORD: 'password123'
+      PIHOLE_DNS_1: 1.1.1.1 # the main DNS resolver Cloudflare
+      PIHOLE_DNS_2: 1.0.0.1 # secondary DNS resolver Cloudflare   
+    dns:
+      - 127.0.0.1 # system resolver 
+    # Volumes store your data between container upgrades
+    volumes:
+      - './etc-pihole:/etc/pihole'
+      - './etc-dnsmasq.d:/etc/dnsmasq.d'
+    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    # cap_add:
+      # - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+    restart: unless-stopped
